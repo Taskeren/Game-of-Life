@@ -11,6 +11,9 @@ public class World {
 	
 	boolean init = false;
 	
+	// Config
+	protected Configuration cfg = new Configuration();
+	
 	// Output
 	protected PrintWriter out;
 	
@@ -22,8 +25,11 @@ public class World {
 	private int lx;
 	private int ly;
 	
-	int tick = 20;
+	int tick = cfg.Tick;
 	
+	/**
+	 * Use init() to initialize
+	 * */
 	public World() {}
 	
 	/**
@@ -39,7 +45,7 @@ public class World {
 		UPDATER = new Point[this.lx][this.ly];
 		// init PrintWriter
 		try {
-			out = new PrintWriter(new OutputStreamWriter(new FileOutputStream("d:/gol.data.txt"), "utf-8"));
+			out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(cfg.LogFilePath), "utf-8"));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
@@ -50,7 +56,7 @@ public class World {
 				WORLD[x][y] = new Point();
 			}
 		}
-		if(GameOfLife.RANDOM) generate();
+		if(cfg.Random) generate();
 		init = true;
 	}
 	
@@ -61,7 +67,7 @@ public class World {
 			time++;
 			String re = "=============>µÚ"+time+"´Îµü´ú<==============\r\n" + this;
 			System.out.println(re);
-			out.println(re);
+			if(out!=null) out.println(re);
 			this.update();
 			Thread.sleep(delay);
 		}
@@ -126,9 +132,8 @@ public class World {
 		return this.getPoint(x, y).isFull();
 	}
 	
-	// Auto generate 100 points
 	public void generate() {
-		this.generate(100);
+		this.generate(cfg.RandomNum);
 	}
 	
 	/**
