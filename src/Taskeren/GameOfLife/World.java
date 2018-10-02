@@ -63,8 +63,12 @@ public class World {
 	public void loop() throws InterruptedException {
 		int delay = tick == 0 ? 1000 : 1000 / tick;
 		int time = 0;
+		String cache = "";
 		while(true) {
 			time++;
+			if(cache.equals((cache = this.toString()))) {
+				break;
+			}
 			String re = "=============>µÚ"+time+"´Îµü´ú<==============\r\n" + this;
 			System.out.println(re);
 			if(out!=null) out.println(re);
