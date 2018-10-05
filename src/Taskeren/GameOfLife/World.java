@@ -13,6 +13,8 @@ public class World {
 	
 	// Config
 	protected Configuration cfg = new Configuration();
+	boolean useConfig = true;
+	int tick;
 	
 	// Output
 	protected PrintWriter out;
@@ -25,12 +27,14 @@ public class World {
 	private int lx;
 	private int ly;
 	
-	int tick = cfg.Tick;
-	
 	/**
 	 * Use init() to initialize
 	 * */
 	public World() {}
+	
+	public void useConfig(boolean b) {
+		this.useConfig = b;
+	}
 	
 	/**
 	 * Initialize the world before running
@@ -56,7 +60,10 @@ public class World {
 				WORLD[x][y] = new Point();
 			}
 		}
-		if(cfg.Random) generate();
+		if(this.useConfig) {
+			if(cfg.Random) this.generate();
+			this.tick = cfg.Tick;
+		}
 		init = true;
 	}
 	
@@ -67,6 +74,7 @@ public class World {
 		while(true) {
 			time++;
 			if(cache.equals((cache = this.toString()))) {
+				System.out.println(">>> RESULT!!! <<<");
 				break;
 			}
 			String re = "=============>µÚ"+time+"´Îµü´ú<==============\r\n" + this;
@@ -129,11 +137,27 @@ public class World {
 		}
 	}
 	
+	public void setClear(int x, int y) {
+		this.getPoint(x ,y).setClear();
+	}
+	
 	/**
 	 * @return Is point full. If the point isn't found, returns <em>false</em>
 	 * */
 	public boolean isFull(int x, int y) {
 		return this.getPoint(x, y).isFull();
+	}
+	
+	public void setTick(int tick) {
+		this.tick = tick;
+	}
+	
+	public void clearAll() {
+		for(Point[] k : WORLD) {
+			for(Point p : k) {
+				p.setClear();
+			}
+		}
 	}
 	
 	public void generate() {
